@@ -1,0 +1,27 @@
+[project]
+name = "toy-server"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "pscrapy",email = "nicolipaolo90@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard] (>=0.129.0,<0.130.0)"
+]
+
+[tool.poetry]
+packages = [{include = "toy_server", from = "src"}]
+
+
+[tool.poetry.group.gunicorn_worker.dependencies]
+uvicorn-worker = "^0.4.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
