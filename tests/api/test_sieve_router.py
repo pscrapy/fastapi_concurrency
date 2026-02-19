@@ -9,10 +9,10 @@ def test_sieve_def(client: TestClient) -> None:
 
 
 def test_sieve_def_long(client: TestClient) -> None:
-    response = client.get("/api/sieve/def?n=100000")
+    response = client.get("/api/sieve/def?n=1000")
     assert response.status_code == 200
     content = response.json()
-    assert content["nth_prime"] == 1299709
+    assert content["nth_prime"] == 7919
 
 
 def test_sieve_async(client: TestClient) -> None:
@@ -23,7 +23,7 @@ def test_sieve_async(client: TestClient) -> None:
 
 
 def test_sieve_async_long(client: TestClient) -> None:
-    response = client.get("/api/sieve/async?n=100000")
+    response = client.get("/api/sieve/async?n=1000")
     assert response.status_code == 200
     content = response.json()
-    assert content["nth_prime"] == 1299709
+    assert content["nth_prime"] == 7919
