@@ -2,4 +2,4 @@ FROM fastapi_concurrency_base:latest
 
 RUN poetry install --without dev,gunicorn_worker
 
-CMD ["uvicorn", "toy_server.app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["./main.uvicorn.sh"]
