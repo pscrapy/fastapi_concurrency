@@ -4,7 +4,7 @@ from config.settings import settings
 
 if __name__ == "__main__":
     uvicorn.run(
-        app, 
+        "toy_server.app:app", 
         host=settings.server_host, port=settings.server_port, 
         workers=settings.uvicorn_workers,
         limit_concurrency=settings.uvicorn_concurrency_limit,
