@@ -39,5 +39,18 @@ run-uvicorn:
 build-all: build-uvicorn build-main build-fastapi build-gunicorn
 
 
+tag-all:
+	docker tag fastapi_concurrency:gunicorn pscrapy/test_fastapi_concurrency:gunicorn
+	docker tag fastapi_concurrency:main pscrapy/test_fastapi_concurrency:main
+	docker tag fastapi_concurrency:fastapi pscrapy/test_fastapi_concurrency:fastapi
+	docker tag fastapi_concurrency:uvicorn pscrapy/test_fastapi_concurrency:uvicorn
+
+push-tags:
+	docker push pscrapy/test_fastapi_concurrency:gunicorn
+	docker push pscrapy/test_fastapi_concurrency:main
+	docker push pscrapy/test_fastapi_concurrency:fastapi
+	docker push pscrapy/test_fastapi_concurrency:uvicorn
+	
+
 clean:
 	docker image prune -f
