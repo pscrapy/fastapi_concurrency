@@ -5,13 +5,19 @@ from fastapi.routing import APIRouter
 from fastapi import BackgroundTasks
 
 from toy_server.core.seppuku.memory import SizeUnit, generate_footprint
-from toy_server.core.seppuku.threads import busywork
+from toy_server.core.seppuku.threads import busywork, sleepywork, TaskType, ThreadType
 
 # NB registries are scoped to single worker process
 OBJECT_REGISTRY = list()
 THREAD_REGISTRY = {
-    "threads": 0,
-    "background": 0
+    ThreadType.THREAD: {
+        TaskType.SLEEPY: 0,
+        TaskType.BUSY: 0
+    },
+    ThreadType.BACKGROUND: {
+        TaskType.SLEEPY: 0,
+        TaskType.BUSY: 0
+    }
 }
 
 
@@ -36,16 +42,23 @@ async def memory_status():
 
 
 @router.post("/thread")
-def thread_spawner(background_tasks: BackgroundTasks, bkg: bool = False):
+def thread_spawner(background_tasks: BackgroundTasks, bkg: bool = False, sleepy: bool = False):
+
+    task = sleepywork if sleepy else busywork   
+    key = TaskType.SLEEPY if sleepy else TaskType.BUSY
+    
+    thread_type = ThreadType.BACKGROUND if bkg else ThreadType.THREAD
 
     if bkg:
-        background_tasks.add_task(busywork)
-        THREAD_REGISTRY["background"] += 1
-        return {"new_task": "BACKGROUND"}
+        background_tasks.add_task(task)
     else:
-        coro = asyncio.to_thread(busywork)
-        THREAD_REGISTRY["threads"] += 1
-        return {"new_task": "THREAD"}
+        coro = asyncio.to_thread(task)
+    
+    THREAD_REGISTRY[thread_type][key] += 1
+    return {
+        "new_task": thread_type,
+        "type": key
+    }
 
 
 
